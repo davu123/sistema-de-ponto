@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle de Ponto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Controle de Ponto</h1>
+
+        <div id="currentDateTime">
+            <p>Data e Hora Atual: <span id="dateTime"></span></p>
+        </div>
+
+        <div id="ponto">
+            <button onclick="registrarPonto('entradaExpediente')">Entrada Expediente</button>
+            <button onclick="registrarPonto('saidaExpediente')">Saída Expediente</button>
+            <button onclick="registrarPonto('entradaIntervalo')">Entrada Intervalo</button>
+            <button onclick="registrarPonto('saidaIntervalo')">Saída Intervalo</button>
+        </div>
+
+        <div id="justificativa">
+            <label for="justificativaText">Justificativa para Ausência:</label>
+            <input type="text" id="justificativaText" placeholder="Descreva a justificativa...">
+            <input type="file" id="uploadFile">
+            <button onclick="registrarJustificativa()">Registrar Justificativa</button>
+        </div>
+
+        <div id="relatorio">
+            <h2>Relatório de Ponto</h2>
+            <button onclick="visualizarRelatorio()">Visualizar Relatório</button>
+            <div id="relatorioContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
