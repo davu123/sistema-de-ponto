@@ -4,37 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Controle de Ponto</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        #currentDateTime {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .registrar-btn {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        #registros {
+            list-style: none;
+            padding: 0;
+        }
+
+        #registros li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        #registros li:hover {
+            transform: scale(1.02);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Sistema de Controle de Ponto</h1>
-
-        <div id="currentDateTime">
-            <p>Data e Hora Atual: <span id="dateTime"></span></p>
+        
+        <div>
+            <h2>Data e Hora Atual:</h2>
+            <p id="currentDateTime"></p>
         </div>
 
-        <div id="ponto">
-            <button onclick="registrarPonto('entradaExpediente')">Entrada Expediente</button>
-            <button onclick="registrarPonto('saidaExpediente')">Saída Expediente</button>
+        <div class="registrar-btn">
+            <button onclick="registrarPonto('entrada')">Entrada</button>
+            <button onclick="registrarPonto('saida')">Saída</button>
+        </div>
+        <div class="registrar-btn">
             <button onclick="registrarPonto('entradaIntervalo')">Entrada Intervalo</button>
             <button onclick="registrarPonto('saidaIntervalo')">Saída Intervalo</button>
         </div>
 
-        <div id="justificativa">
-            <label for="justificativaText">Justificativa para Ausência:</label>
-            <input type="text" id="justificativaText" placeholder="Descreva a justificativa...">
+        <div>
+            <h2>Justificativa de Ausência</h2>
+            <textarea id="justificativa" placeholder="Digite a justificativa"></textarea>
+            <br>
+            <label for="uploadFile">Anexar arquivo:</label>
             <input type="file" id="uploadFile">
-            <button onclick="registrarJustificativa()">Registrar Justificativa</button>
+            <br><br>
+            <button onclick="registrarJustificativa()">Enviar Justificativa</button>
         </div>
 
-        <div id="relatorio">
-            <h2>Relatório de Ponto</h2>
-            <button onclick="visualizarRelatorio()">Visualizar Relatório</button>
-            <div id="relatorioContent"></div>
+        <div>
+            <h2>Registros</h2>
+            <ul id="registros"></ul>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Função para atualizar a data e hora atual
+        function atualizarDataHoraAtual() {
+            const now = new Date();
+            const dataHoraAtual = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+            document.getElementById('currentDateTime').textContent = dataHoraAtual;
+        }
+
+        setInterval(atualizarDataHoraAtual, 1000); // Atualiza a cada segundo
+
+        // Array para armazenar registros de ponto
+        let registros = [];
+
+        // Função para registrar ponto
+        function registrarPonto(tipo) {
+            const now = new Date();
+            const dataHoraAtual = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+            if (tipo === 'entrada' || tipo === 'saida' || tipo === 'entradaIntervalo' || tipo === 'saidaIntervalo') {
+                const registro = {
+                    tipo: tipo,
+                    dataHora: dataHoraAtual,
+                };
+                registros.push(registro);
+                atualizarListaRegistros();
+            }
+        }
+
+        // Função para mostrar registros na interface
+        function atualizarListaRegistros() {
+            const lista = document.getElementById('registros');
+            lista.innerHTML = '';
+            registros.forEach((registro) => {
+                const item = document.createElement('li');
+                item.textContent = `${registro.tipo.toUpperCase()}: ${registro.dataHora}`;
+                lista.appendChild(item);
+            });
+        }
+
+        // Função para registrar justificativa de ausência
+        function registrarJustificativa() {
+            const justificativa = document.getElementById('justificativa').value;
+            const uploadFile = document.getElementById('uploadFile').files[0];
+
+            if (justificativa) {
+                const registroJustificativa = {
+                    tipo: 'justificativa',
+                    justificativa: justificativa,
+                    arquivo: uploadFile ? uploadFile.name : 'Sem anexo',
+                };
+                registros.push(registroJustificativa);
+                atualizarListaRegistros();
+                alert("Justificativa registrada com sucesso.");
+            } else {
+                alert("Por favor, insira uma justificativa.");
+            }
+        }
+    </script>
 </body>
 </html>
