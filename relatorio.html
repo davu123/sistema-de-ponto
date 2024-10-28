@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Pontos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Relatório de Pontos</h1>
+        <label for="filter">Filtrar por:</label>
+        <select id="filter" onchange="aplicarFiltro()">
+            <option value="todos">Todos</option>
+            <option value="ultimaSemana">Última Semana</option>
+            <option value="ultimoMes">Último Mês</option>
+        </select>
+        <div id="relatorioContent"></div>
+        <a href="index.html">Voltar ao Sistema</a>
+    </div>
+    <script src="relatorio.js"></script>
+</body>
+</html>
